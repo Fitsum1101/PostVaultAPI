@@ -4,6 +4,6 @@ const postControlles = require("../controllers/post");
 
 const router = express.Router();
 
-router.post('/')
+router.post('/posts',postControlles)
 
 module.exports = router.promise();
