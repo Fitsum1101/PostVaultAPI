@@ -18,15 +18,17 @@ exports.postSignUp = async (req, res, next) => {
     const newUser = new User(username, email, hashPassword);
     const result = await newUser.save();
     if (result) {
-      res.statusCode(201).json({
+      res.status(201).json({
         msg: "User created succssfuly",
+        user: newUser,
       });
     }
   } catch (error) {
-    if (!error.statusCode) {
-      error.statusCode = 500;
-    }
-    throw error;
+    console.log(error);
+    next({
+      msg: error.message,
+      statusCode: error.statusCode,
+    });
   }
 };
 
@@ -47,12 +49,10 @@ exports.postLogin = async (req, res, next) => {
       err.statusCode = 422;
       throw err;
     }
-    const token = jwt.sign(
-      { username: user[0][0].username, email },
-      "mysecretkeyformyrpoject",
-      { expiresIn: "1hr" }
-    );
-    res.statusCode(200).json({
+    const token = jwt.sign({ ...user[0][0] }, "mysecretkeyformyrpoject", {
+      expiresIn: "1hr",
+    });
+    res.status(200).json({
       token,
       msg: "welcom back to account ",
     });
@@ -60,6 +60,6 @@ exports.postLogin = async (req, res, next) => {
     if (!error.statusCode) {
       error.statusCode = 500;
     }
-    throw error;
+    next(error);
   }
 };

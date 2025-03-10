@@ -8,11 +8,11 @@ module.exports = class User {
   }
   save() {
     return db.execute(
-      "INSERT INTO user VALUES(username,email,password) VALUES(?,?,?)",
+      "INSERT INTO users(username,email,password) VALUES(?,?,?)",
       [this.username, this.email, this.password]
     );
   }
   static findUser(email) {
-    return db.execute("SELECT * FROM users WHERE email = " + email);
+    return db.execute(`SELECT * FROM users WHERE email ='${email}'`);
   }
 };
