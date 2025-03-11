@@ -4,9 +4,11 @@ const jwt = require("jsonwebtoken");
 const User = require("../Model/user");
 
 exports.postSignUp = async (req, res, next) => {
+  console.log("caleed");
   const username = req.body.username;
   const email = req.body.email;
   const password = req.body.password;
+  console.log(username, email, password);
   try {
     const myuser = await User.findUser(email);
     if (myuser[0].length > 0) {
@@ -24,7 +26,6 @@ exports.postSignUp = async (req, res, next) => {
       });
     }
   } catch (error) {
-    console.log(error);
     next({
       msg: error.message,
       statusCode: error.statusCode,

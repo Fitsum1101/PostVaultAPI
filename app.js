@@ -10,14 +10,14 @@ app.use(bodyParsel.urlencoded({ extended: false }));
 app.use(bodyParsel.json());
 
 app.use((req, res, next) => {
-  res.setHeader("Access-Control-Allow-Orign", "*");
-  res.setHeader("Access-Control-Allow-Methods", "post,get,delete,put");
-  res.setHeader("Access-Control-Allow-Headers", "Content-type,Authorization");
+  res.setHeader("Access-Control-Allow-Origin", "*"); // Corrected "Orign" to "Origin"
+  res.setHeader("Access-Control-Allow-Methods", "POST, GET, DELETE, PUT"); // Uppercased HTTP methods
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization"); // Fixed "Content-type" casing
   next();
 });
 
 app.use(authRoute);
-app.use(postRoute)
+app.use(postRoute);
 
 app.use((err, req, res, next) => {
   if (!err.statusCode) {
@@ -25,8 +25,8 @@ app.use((err, req, res, next) => {
   }
   const statusCode = err.statusCode;
   res.status(statusCode).json({
-    err
-  })
+    err,
+  });
 });
 
 app.listen(8080);
