@@ -1,5 +1,6 @@
 const express = require("express");
 const bodyParsel = require("body-parser");
+const multer = require("multer");
 
 const authRoute = require("./routes/auth");
 const postRoute = require("./routes/post");
@@ -15,7 +16,28 @@ app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization"); // Fixed "Content-type" casing
   next();
 });
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "images/imageUpload");
+  },
+  filename: (req, file, cb) => {
+    const mimetype = file.mimetype.split("/")[1];
+    console.log(mimetype);
+    const num = Math.random();
 
+    cb(null, num + file.originalname);
+  },
+});
+const fileFilter = (req, file, cb) => {
+  if (
+    file.mimetype !== "image/png" ||
+    file.mimetype !== "image/jpg" ||
+    file.mimetype !== "image/jpag"
+  ) {
+    cb(null, false);
+  } else cb(null, true);
+};
+app.use(multer({ storage, fileFilter }).single("file"));
 app.use(authRoute);
 app.use(postRoute);
 
