@@ -1,9 +1,12 @@
 const Post = require("../Model/posts");
-
+const deleteFile = require("../util/file");
 exports.createPosts = async (req, res, next) => {
   const content = req.body.content;
   const user = req.user.id;
-  const newPost = new Post(content, user);
+  console.log(req.file);
+  const productUrl = req.file.path;
+
+  const newPost = new Post(content, user, productUrl);
   try {
     const result = await newPost.save();
     res.status(201).json({
@@ -35,9 +38,13 @@ exports.getPosts = async (req, res, next) => {
 
 exports.deletePost = async (req, res, next) => {
   const user_id = req.user.id;
-  const post_id = req.params.postId;
+  const post_id = req.body.postId;
   try {
+    const post = await Post.fetchById(post_id);
+    const deletePath = post[0][0].productURL;
     const result = await Post.deletePost(user_id, post_id);
+    console.log(deletePath);
+    deleteFile(deletePath);
     res.status(200).json({
       msg: "deleted succssfuly",
       result,

@@ -1,7 +1,7 @@
-const { truncate } = require("fs");
+const { unlink } = require("fs");
 
 module.exports = (filepath) => {
-  truncate(filepath, (err) => {
-    throw err;
+  unlink(filepath, (err) => {
+    if (err) throw err;
   });
 };

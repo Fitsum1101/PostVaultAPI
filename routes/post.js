@@ -9,6 +9,6 @@ router.post("/posts", is_auth, postControlles.createPosts);
 
 router.get("/posts", is_auth, postControlles.getPosts);
 
-router.post("/posts/delete/:postId", is_auth, postControlles.deletePost);
+router.post("/posts/delete", is_auth, postControlles.deletePost);
 
 module.exports = router;

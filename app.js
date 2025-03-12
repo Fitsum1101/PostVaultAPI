@@ -16,9 +16,10 @@ app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization"); // Fixed "Content-type" casing
   next();
 });
+
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, "images/imageUpload");
+    cb(null, "images/");
   },
   filename: (req, file, cb) => {
     const mimetype = file.mimetype.split("/")[1];
@@ -28,14 +29,18 @@ const storage = multer.diskStorage({
     cb(null, num + file.originalname);
   },
 });
+
 const fileFilter = (req, file, cb) => {
   if (
-    file.mimetype !== "image/png" ||
-    file.mimetype !== "image/jpg" ||
-    file.mimetype !== "image/jpag"
+    file.mimetype === "image/png" ||
+    file.mimetype === "image/jpg" ||
+    file.mimetype === "image/jpag"
   ) {
+    cb(null, true);
+  } else {
     cb(null, false);
-  } else cb(null, true);
+    throw new Error("invalid image type");
+  }
 };
 app.use(multer({ storage, fileFilter }).single("file"));
 app.use(authRoute);
@@ -50,5 +55,6 @@ app.use((err, req, res, next) => {
     err,
   });
 });
+
 
 app.listen(8080);
