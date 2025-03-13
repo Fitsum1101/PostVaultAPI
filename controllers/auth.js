@@ -38,8 +38,9 @@ exports.postLogin = async (req, res, next) => {
   const email = req.body.email;
   const password = req.body.password;
   const errors = validationResult(req);
-  
+
   if (!errors.isEmpty()) {
+    console.log(errors.array());
     return res.status(422).json({
       error: errors.array(),
     });
@@ -52,7 +53,6 @@ exports.postLogin = async (req, res, next) => {
       err.statusCode = 422;
       throw err;
     }
-    console.log("valid user");
     const hasPassword = user[0][0].password;
     const isValid = await bcrypt.compare(password, hasPassword);
     if (!isValid) {

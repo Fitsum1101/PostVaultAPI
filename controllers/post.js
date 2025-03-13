@@ -1,9 +1,15 @@
+const { validationResult } = require("express-validator");
+
 const Post = require("../Model/posts");
 const deleteFile = require("../util/file");
+
 exports.createPosts = async (req, res, next) => {
+  const result = validationResult(req);
+
+  console.log(result.array());
+
   const content = req.body.content;
   const user = req.user.id;
-  console.log(req.file);
   const productUrl = req.file.path;
 
   const newPost = new Post(content, user, productUrl);
@@ -43,7 +49,6 @@ exports.deletePost = async (req, res, next) => {
     const post = await Post.fetchById(post_id);
     const deletePath = post[0][0].productURL;
     const result = await Post.deletePost(user_id, post_id);
-    console.log(deletePath);
     deleteFile(deletePath);
     res.status(200).json({
       msg: "deleted succssfuly",
