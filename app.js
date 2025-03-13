@@ -4,6 +4,7 @@ const multer = require("multer");
 
 const authRoute = require("./routes/auth");
 const postRoute = require("./routes/post");
+const { init } = require("./socket");
 
 const app = express();
 
@@ -56,5 +57,10 @@ app.use((err, req, res, next) => {
   });
 });
 
+const server = app.listen(8080);
 
-app.listen(8080);
+const io = init(server);
+
+io.on("connection", (stream) => {
+  console.log("someone connected successfuly");
+});
