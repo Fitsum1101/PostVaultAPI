@@ -6,6 +6,7 @@ const deleteFile = require("../util/file");
 exports.createPosts = async (req, res, next) => {
   const result = validationResult(req);
 
+  console.log(req.body);
   const content = req.body.content;
   const title = req.body.title;
   const user = req.user.id;
