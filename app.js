@@ -52,6 +52,7 @@ app.use((err, req, res, next) => {
     err.statusCode = 500;
   }
   const statusCode = err.statusCode;
+
   res.status(statusCode).json({
     err,
   });
@@ -61,6 +62,6 @@ const server = app.listen(8080);
 
 const io = init(server);
 
-io.on("connection", (stream) => {
-  console.log("someone connected successfuly");
+io.on("connection", (socket) => {
+  console.log("someone conected");
 });

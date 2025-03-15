@@ -21,7 +21,7 @@ router.post(
   postControlles.createPosts
 );
 
-router.get("/posts", is_auth, postControlles.getPosts);
+router.get("/posts", postControlles.getPosts);
 
 router.post("/posts/delete", is_auth, postControlles.deletePost);
 

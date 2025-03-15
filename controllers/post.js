@@ -6,19 +6,21 @@ const deleteFile = require("../util/file");
 exports.createPosts = async (req, res, next) => {
   const result = validationResult(req);
 
-  console.log(result.array());
-
   const content = req.body.content;
+  const title = req.body.title;
   const user = req.user.id;
   const productUrl = req.file.path;
 
-  const newPost = new Post(content, user, productUrl);
+  console.log(content, title, user, productUrl);
+
+  const newPost = new Post(content, user, productUrl, title);
   try {
     const result = await newPost.save();
     res.status(201).json({
       msg: "new posts adde to user",
       post: {
         content,
+        title,
       },
     });
   } catch (error) {
@@ -28,7 +30,7 @@ exports.createPosts = async (req, res, next) => {
 };
 
 exports.getPosts = async (req, res, next) => {
-  const user = req.user.id;
+  // const user = req.user.id;
   //   pagenation in needed
   try {
     const allPosts = await Post.fetchAll();

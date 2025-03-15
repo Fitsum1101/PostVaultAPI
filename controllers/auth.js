@@ -40,26 +40,23 @@ exports.postLogin = async (req, res, next) => {
   const errors = validationResult(req);
 
   if (!errors.isEmpty()) {
-    console.log(errors.array());
+    const returnErrors = {};
+    const errorArray = errors.array();
+
+    errorArray.forEach((error) => {
+      if (!returnErrors["email"] && error.path === "email")
+        returnErrors["email"] = error.msg;
+      if (!returnErrors["password"] && error.path === "password")
+        returnErrors["password"] = error.msg;
+    });
+
     return res.status(422).json({
-      error: errors.array(),
+      error: returnErrors,
     });
   }
 
   try {
     const user = await User.findUser(email);
-    if (!user[0].length) {
-      const err = new Error("Email not exists!!!");
-      err.statusCode = 422;
-      throw err;
-    }
-    const hasPassword = user[0][0].password;
-    const isValid = await bcrypt.compare(password, hasPassword);
-    if (!isValid) {
-      const err = new Error("password is not corrrect!!");
-      err.statusCode = 422;
-      throw err;
-    }
     const token = jwt.sign({ ...user[0][0] }, "mysecretkeyformyrpoject", {
       expiresIn: "1hr",
     });
