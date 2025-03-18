@@ -9,7 +9,6 @@ module.exports = (req, res, next) => {
   try {
     const isValid = jwt.verify(token, "mysecretkeyformyrpoject"); // Fixed the typo in "myproject"
     req.user = isValid;
-    console.log("authticated");
     next();
   } catch (error) {
     console.error("Token verification failed:", error);

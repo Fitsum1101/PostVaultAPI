@@ -12,9 +12,9 @@ app.use(bodyParsel.urlencoded({ extended: false }));
 app.use(bodyParsel.json());
 
 app.use((req, res, next) => {
-  res.setHeader("Access-Control-Allow-Origin", "*"); // Corrected "Orign" to "Origin"
-  res.setHeader("Access-Control-Allow-Methods", "POST, GET, DELETE, PUT"); // Uppercased HTTP methods
-  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization"); // Fixed "Content-type" casing
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Methods", "POST, GET, DELETE, PUT");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
   next();
 });
 
@@ -26,7 +26,6 @@ const storage = multer.diskStorage({
     const mimetype = file.mimetype.split("/")[1];
     console.log(mimetype);
     const num = Math.random();
-
     cb(null, num + file.originalname);
   },
 });
@@ -35,10 +34,11 @@ const fileFilter = (req, file, cb) => {
   if (
     file.mimetype === "image/png" ||
     file.mimetype === "image/jpg" ||
-    file.mimetype === "image/jpag"
+    file.mimetype === "image/jpeg"
   ) {
     cb(null, true);
   } else {
+    console.log(file);
     cb(null, false);
     throw new Error("invalid image type");
   }
@@ -61,7 +61,6 @@ app.use((err, req, res, next) => {
 const server = app.listen(8080);
 
 const io = init(server);
-
 io.on("connection", (socket) => {
-  console.log("someone conected");
+  console.log("some one connected");
 });

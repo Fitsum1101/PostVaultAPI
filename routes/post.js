@@ -23,6 +23,12 @@ router.post(
 
 router.get("/posts", postControlles.getPosts);
 
-router.post("/posts/delete", is_auth, postControlles.deletePost);
+router.get("/posts/myposts", is_auth, postControlles.getUserPosts);
+
+router.delete("/posts/delete", is_auth, postControlles.deletePost);
+
+router.get("/posts/update/:postId", postControlles.getUpdatePost);
+
+router.put("/posts/update/:postId", is_auth, postControlles.putPost);
 
 module.exports = router;
