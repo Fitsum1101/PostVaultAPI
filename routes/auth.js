@@ -11,7 +11,7 @@ const router = express.Router();
 router.post(
   "/signUp",
   [
-    body("username").trim().notEmpty(),
+    body("username").trim().notEmpty().withMessage("username is empty!!!"),
     validate.email().custom(async (value, { req }) => {
       const user = await User.findUser(value);
       if (user[0].length) {

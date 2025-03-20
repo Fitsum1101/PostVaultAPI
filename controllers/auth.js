@@ -12,7 +12,7 @@ exports.postSignUp = async (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(422).json({
-      error: errors.array(),
+      error: errors.array()[0].msg,
     });
   }
   try {
@@ -49,9 +49,8 @@ exports.postLogin = async (req, res, next) => {
       if (!returnErrors["password"] && error.path === "password")
         returnErrors["password"] = error.msg;
     });
-
     return res.status(422).json({
-      error: returnErrors,
+      error: errorArray[0].msg,
     });
   }
 

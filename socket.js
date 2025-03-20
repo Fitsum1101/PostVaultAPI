@@ -11,7 +11,7 @@ module.exports = {
     return io;
   },
   getIO: () => {
-    if (io) {
+    if (!io) {
       throw new Error("undefined socket io");
     }
 

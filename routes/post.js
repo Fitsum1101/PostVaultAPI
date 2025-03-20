@@ -8,7 +8,7 @@ const router = express.Router();
 
 const { body } = new ExpressValidator({
   isValidContent: (value) => {
-    if (value.length > 6) {
+    if (value.length < 6) {
       throw new Error("new functionality implemented");
     }
   },
@@ -17,7 +17,11 @@ const { body } = new ExpressValidator({
 router.post(
   "/posts",
   is_auth,
-  [body("content").trim().notEmpty().isValidContent()],
+  [
+    body("title").trim().notEmpty().withMessage("title is empty"),
+    body("content").trim().notEmpty().withMessage("contetnt value is empty"),
+    // .isValidContent(),
+  ],
   postControlles.createPosts
 );
 

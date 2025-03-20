@@ -2,19 +2,34 @@ const { validationResult } = require("express-validator");
 
 const Post = require("../Model/posts");
 const deleteFile = require("../util/file");
-const socket = require("../socket");
+const { getIO } = require("../socket");
+const { propfind } = require("../routes/auth");
 
 exports.createPosts = async (req, res, next) => {
   const result = validationResult(req);
   const content = req.body.content;
   const title = req.body.title;
   const user = req.user.id;
-  const productUrl = req.file.path;
+  const productUrl = req.file ? req.file.path : undefined;
+
+  if (!result.isEmpty() || !productUrl) {
+    console.log(result.array());
+    let error;
+    if (!result.isEmpty()) {
+      error = result.array()[0].msg;
+    } else {
+      error = "please insert product image";
+    }
+    console.log(error);
+    return res.status(422).json({
+      error: error,
+    });
+  }
 
   const newPost = new Post(content, user, productUrl, title);
   try {
     const result = await newPost.save();
-    socket.emit("posts", { action: "added", post: newPost });
+    getIO().emit("posts", { action: "added", post: newPost });
     res.status(201).json({
       msg: "new posts adde to user",
       post: {
